@@ -8,19 +8,39 @@ import { Textarea } from '@/components/ui/textarea';
 
 const CATEGORIES = ['Undangan', 'Flash Card', 'Mahkota', 'Stiker', 'Kipas', 'Souvenir', 'Dekorasi', 'Lainnya'];
 
-export default function CreateProduct() {
+type Product = {
+  id: number;
+  name: string;
+  description: string;
+  price: string | number;
+  image_path: string;
+  category: string;
+  whatsapp_number: string;
+  whatsapp_message?: string | null;
+  is_active: boolean;
+};
+
+export default function EditProduct({ product }: { product: Product }) {
   const { data, setData, post, processing, errors } = useForm({
-    name: '', description: '', price: '', category: CATEGORIES[0], image: null as File | null, whatsapp_number: '', whatsapp_message: '', is_active: true,
+    _method: 'put',
+    name: product.name,
+    description: product.description,
+    price: product.price,
+    category: product.category,
+    image: null as File | null,
+    whatsapp_number: product.whatsapp_number,
+    whatsapp_message: product.whatsapp_message || '',
+    is_active: product.is_active,
   });
 
   function submit(e: React.FormEvent) {
     e.preventDefault();
-    post(route('admin.products.store'));
+    post(route('admin.products.update', product.id));
   }
 
   return (
     <AppLayout>
-      <Head title="Tambah Produk" />
+      <Head title="Edit Produk" />
       <div className="mx-auto w-full max-w-3xl px-4 py-8">
         <Card>
           <CardContent className="p-6">
@@ -61,15 +81,16 @@ export default function CreateProduct() {
                   <Input value={data.whatsapp_message} onChange={(e) => setData('whatsapp_message', e.target.value)} />
                 </div>
               </div>
+
               <div>
-                <Label>Foto Produk</Label>
+                <Label>Foto Produk (opsional)</Label>
                 <Input type="file" onChange={(e) => setData('image', e.target.files ? e.target.files[0] : null)} />
                 {errors.image && <p className="text-sm text-red-500">{errors.image}</p>}
               </div>
 
               <div className="flex items-center justify-end gap-3">
                 <Link href={route('admin.products.index')} className="text-sm underline">Batal</Link>
-                <Button type="submit" disabled={processing} className="bg-rose-500 hover:bg-rose-600">Simpan</Button>
+                <Button type="submit" disabled={processing} className="bg-rose-500 hover:bg-rose-600">Simpan Perubahan</Button>
               </div>
             </form>
           </CardContent>
