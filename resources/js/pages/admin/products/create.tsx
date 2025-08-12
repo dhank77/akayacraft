@@ -15,7 +15,7 @@ export default function CreateProduct() {
 
   function submit(e: React.FormEvent) {
     e.preventDefault();
-    post(route('admin.products.store'));
+    post(route('admin.products.store'), { forceFormData: true });
   }
 
   return (

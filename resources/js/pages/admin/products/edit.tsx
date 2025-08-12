@@ -35,7 +35,7 @@ export default function EditProduct({ product }: { product: Product }) {
 
   function submit(e: React.FormEvent) {
     e.preventDefault();
-    post(route('admin.products.update', product.id));
+    post(route('admin.products.update', product.id), { forceFormData: true });
   }
 
   return (

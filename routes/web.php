@@ -3,15 +3,14 @@
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\ProductController as PublicProductController;
 
 Route::get('/', function () {
     return Inertia::render('welcome');
 })->name('home');
 
 // Public products page
-Route::get('/products', function () {
-    return Inertia::render('products/index');
-})->name('products.index');
+Route::get('/products', [PublicProductController::class, 'index'])->name('products.index');
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', function () {

@@ -2,10 +2,10 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import AppLayout from '@/layouts/app-layout';
+import PublicLayout from '@/layouts/public-layout';
 import { type BreadcrumbItem } from '@/types';
 import { Head } from '@inertiajs/react';
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 
 const breadcrumbs: BreadcrumbItem[] = [{ title: 'Produk', href: '/products' }];
 
@@ -22,18 +22,11 @@ type Product = {
 
 const CATEGORIES = ['Semua', 'Undangan', 'Flash Card', 'Mahkota', 'Stiker', 'Kipas', 'Souvenir', 'Dekorasi', 'Lainnya'];
 
-export default function ProductsIndex() {
+export default function ProductsIndex({ products: initialProducts }: { products: Product[] }) {
     const [query, setQuery] = useState('');
     const [category, setCategory] = useState('Semua');
 
-    const [products, setProducts] = useState<Product[]>([]);
-
-    useEffect(() => {
-        // fetch from API endpoint
-        fetch('/api/products')
-            .then((r) => r.json())
-            .then((data) => setProducts(data));
-    }, []);
+    const products = initialProducts || [];
 
     const filtered = useMemo(() => {
         return products.filter((p) => {
@@ -52,7 +45,7 @@ export default function ProductsIndex() {
     };
 
     return (
-        <AppLayout breadcrumbs={breadcrumbs}>
+        <PublicLayout breadcrumbs={breadcrumbs}>
             <Head title="Akayacraft | Produk Kreatif">
                 <meta
                     name="description"
@@ -113,6 +106,6 @@ export default function ProductsIndex() {
                     ))}
                 </div>
             </section>
-        </AppLayout>
+        </PublicLayout>
     );
 }
